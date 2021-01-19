@@ -1,0 +1,45 @@
+trigger:
+- master
+
+resources:
+- repo: self
+
+stages:
+- stage: CI
+  displayName: Deploy image to testing environment
+  jobs:  
+  - job: Deploy
+    displayName: Download arifacts
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'helloartifact'
+        itemPattern: '**/*.yaml'
+        targetPath: '$(System.ArtifactsDirectory)'
+    #- task: KubernetesManifest@0
+    
+    #  inputs:
+    #    action: 'deploy'
+    #    kubernetesServiceConnection: 'k8s-service-connection'
+    #    namespace: 'default'
+    #    manifests: '$(System.ArtifactsDirectory)/configuration/k8s/deployment.yaml'
+    #    containers: 'kubectlcz/hello_rest_api:$(tag)'
+- stage: CD
+  displayName: CD Stage
+  dependsOn: CI
+  jobs:
+    - deployment: 
+      displayName: deploy
+      environment: Testing.testing
+      strategy:
+         runOnce:
+            deploy:
+              steps:
+                - task: KubernetesManifest@0
+                  inputs:
+                    action: 'deploy'
+                    manifests: '$(System.ArtifactsDirectory)/configuration/k8s/deployment.yaml'
+                    containers: 'kubectlcz/hello_rest_api:$(tag)' 
