@@ -1,0 +1,28 @@
+trigger:
+- master
+
+resources:
+- repo: self
+
+stages:
+- stage: Deploy
+  displayName: Deploy image
+  jobs:  
+  - job: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'helloartifact'
+        itemPattern: '**/*.yaml'
+        targetPath: '$(System.ArtifactsDirectory)'
+    - task: KubernetesManifest@0
+      inputs:
+        action: 'deploy'
+        kubernetesServiceConnection: 'k8s-service-connection'
+        namespace: 'default'
+        manifests: '$(System.ArtifactsDirectory)/configuration/k8s/deployment.yaml'
+        containers: 'kubectlcz/hello_rest_api:$(tag)'
