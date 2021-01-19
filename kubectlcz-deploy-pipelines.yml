@@ -4,6 +4,10 @@ trigger:
 resources:
 - repo: self
 
+variables:
+ - name: tag
+   value: ${tag}
+
 stages:
 - stage: Build
   displayName: Build image
