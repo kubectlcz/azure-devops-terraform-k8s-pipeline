@@ -25,7 +25,7 @@ metadata:
   namespace: testing
 spec:
   ports:
-  - nodePort: 30702
+  - nodePort: 30703
     port: 5001
     protocol: TCP
     targetPort: 5000
