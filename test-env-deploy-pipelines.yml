@@ -51,5 +51,5 @@ stages:
                 - task: KubernetesManifest@0
                   inputs:
                     action: 'deploy'
-                    manifests: '$(System.ArtifactsDirectory)/configuration/k8s/deployment.yaml'
+                    manifests: '$(System.ArtifactsDirectory)/configuration/k8s/deployment-testing.yaml'
                     containers: 'kubectlcz/hello_rest_api:$(tag)' 
