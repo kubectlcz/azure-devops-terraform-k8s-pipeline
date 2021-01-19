@@ -5,8 +5,7 @@ resources:
 - repo: self
 
 variables:
- - name: tag
-   value: ${tag}
+ tag: 5
 
 stages:
 - stage: Build
