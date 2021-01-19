@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: hello-api
-        image: kubectl/hello_rest_api
+        image: kubectlcz/hello_rest_api
 ---        
 apiVersion: v1
 kind: Service
